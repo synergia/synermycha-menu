@@ -99,14 +99,14 @@ int main()
 
     auto dummy = [](AllSignals&){};
     pageFirst.AddOption(MenuOption("PID", OptionType::Page, &pagePid));
-    pageFirst.AddOption(MenuOption("Opcja 2", OptionType::Config, dummy));
-    pageFirst.AddOption(MenuOption("Opcja 3", OptionType::Config, dummy));
-    pageFirst.AddOption(MenuOption("Opcja 4", OptionType::Config, dummy));
-    pageFirst.AddOption(MenuOption("Opcja 5", OptionType::Config, dummy));
-    pageFirst.AddOption(MenuOption("Opcja 6", OptionType::Config, dummy));
-    pageFirst.AddOption(MenuOption("Info", OptionType::Config, dummy));
+    pageFirst.AddOption(MenuOption("Opcja 2", OptionType::ConfigInline));
+    pageFirst.AddOption(MenuOption("Opcja 3", OptionType::ConfigInline));
+    pageFirst.AddOption(MenuOption("Opcja 4", OptionType::ConfigInline));
+    pageFirst.AddOption(MenuOption("Opcja 5", OptionType::ConfigInline));
+    pageFirst.AddOption(MenuOption("Opcja 6", OptionType::ConfigInline));
+    pageFirst.AddOption(MenuOption("Info", OptionType::ConfigInline));
 
-    pagePid.AddOption(MenuOption("Set P", OptionType::Config, setPCallback));
+    pagePid.AddOption(MenuOption("Set P", OptionType::ConfigInline, setPCallback));
     pagePid.AddOption(MenuOption("Return", OptionType::Page, &pageFirst));
 
     menu.setDefaultMenuPage(&pageFirst);

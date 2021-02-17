@@ -9,4 +9,12 @@ struct AllSignals
     sigslot::signal<> buttonEnter;
 
     sigslot::signal<> displayBuffor;
+
+    sigslot::signal<int&> getP;
+    sigslot::signal<int&> getI;
+    sigslot::signal<int&> getD;
+
+    sigslot::signal<int> setP;
+    sigslot::signal<int> setI;
+    sigslot::signal<int> setD;
 };

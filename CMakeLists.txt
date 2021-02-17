@@ -11,6 +11,7 @@ include_directories(${CURSES_INCLUDE_DIR})
 
 find_package (Threads)
 
+SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -g")
 add_executable(menu main.cpp Menu.cpp MenuPage.cpp MenuOption.cpp DisplayBuffor.cpp)
 
 target_link_libraries(menu ${CURSES_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})

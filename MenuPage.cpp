@@ -29,9 +29,19 @@ void MenuPage::shiftToPreviousOption()
     }
 }
 
-void MenuPage::enterOption()
+void MenuPage::passEnterToChoosenOption()
 {
-    
+    mOptions[mChoosenOption].onEnter();
+}
+
+void MenuPage::passButtonUpToChoosenOption()
+{
+    mOptions[mChoosenOption].onButtonUp();
+}
+
+void MenuPage::passButtonDownToChoosenOption()
+{
+    mOptions[mChoosenOption].onButtonDown();
 }
 
 OptionType MenuPage::getTypeOfChoosenOption() const
@@ -66,11 +76,11 @@ void MenuPage::prepareMenuPageForDisplay()
     {
         if (startPosRow == mChoosenOption)
         {
-            sprintf(displayBuff[i], "> %s", mOptions[startPosRow].getName());
+            sprintf(displayBuff[i], "> %s", mOptions[startPosRow].getTextToDisplay());
         }
         else
         {
-            sprintf(displayBuff[i], "  %s", mOptions[startPosRow].getName());
+            sprintf(displayBuff[i], "  %s", mOptions[startPosRow].getTextToDisplay());
         }
         startPosRow++;
     }

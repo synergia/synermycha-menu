@@ -13,7 +13,10 @@ public:
     void prepareMenuPageForDisplay();
     void shiftToNextOption();
     void shiftToPreviousOption();
-    void enterOption();
+
+    void passEnterToChoosenOption();
+    void passButtonUpToChoosenOption();
+    void passButtonDownToChoosenOption();
 
     OptionType getTypeOfChoosenOption() const;
     MenuPage* getPageOfChoosenOption();

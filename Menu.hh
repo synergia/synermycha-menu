@@ -6,6 +6,13 @@
 
 constexpr int maxNrOfItemMenus{10};
 
+enum class MenuState
+{
+    Normal, // switching in options
+    Changing // giving controll to option
+};
+
+
 class Menu
 {
 public:
@@ -19,4 +26,5 @@ public:
 private:
     AllSignals& mSignals;
     MenuPage* mActualPage;
+    MenuState mState;
 };
