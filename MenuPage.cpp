@@ -59,6 +59,11 @@ OptionCallbackType MenuPage::getCallbackOfChoosenOption()
     mOptions[mChoosenOption].getCallback();
 }
 
+void MenuPage::setDisplayPromt(bool promt)
+{
+    mDisplayPromt = promt;
+}
+
 void MenuPage::prepareMenuPageForDisplay()
 {
     for (int i = 0; i < maxRows; i++)
@@ -72,15 +77,18 @@ void MenuPage::prepareMenuPageForDisplay()
     startPosRow = std::min(startPosRow, mNumberOfOptions - maxRows);
     startPosRow = std::max(startPosRow, 0);
 
+    char text[maxColumns];
     for (int i = 0; i < maxRows && i < mNumberOfOptions; i++)
     {
-        if (startPosRow == mChoosenOption)
+        memset(text, 0, sizeof(text));
+        mOptions[startPosRow].getTextToDisplay(text);
+        if (startPosRow == mChoosenOption and mDisplayPromt)
         {
-            sprintf(displayBuff[i], "> %s", mOptions[startPosRow].getTextToDisplay());
+            sprintf(displayBuff[i], "> %s", text);
         }
         else
         {
-            sprintf(displayBuff[i], "  %s", mOptions[startPosRow].getTextToDisplay());
+            sprintf(displayBuff[i], "  %s", text);
         }
         startPosRow++;
     }

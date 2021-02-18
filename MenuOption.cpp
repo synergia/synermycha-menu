@@ -1,5 +1,6 @@
 #include "MenuOption.hh"
 #include "FatalError.hh"
+#include <cstdio>
 
 MenuOption::MenuOption()
 {
@@ -9,21 +10,15 @@ MenuOption::MenuOption()
 MenuOption::MenuOption(const char* name, OptionType type, MenuPage* page)
     : mName(name),
       mType(type),
-      mEnterType(EnterType::Enter),
-      mPage(page),
-      mCallback(nullptr),
-      mOptionValue(0)
+      mPage(page)
 {
     checkDependencies();
 }
 
-MenuOption::MenuOption(const char* name, OptionType type)
+MenuOption::MenuOption(const char* name, OptionType type, IConfigInline* configObj)
     : mName(name),
       mType(type),
-      mEnterType(EnterType::Enter),
-      mPage(nullptr),
-      mCallback(nullptr),
-      mOptionValue(0)
+      mConfigObj(configObj)
 {
     checkDependencies();
 }
@@ -31,40 +26,53 @@ MenuOption::MenuOption(const char* name, OptionType type)
 MenuOption::MenuOption(const char* name, OptionType type, OptionCallbackType callback)
     : mName(name),
       mType(type),
-      mEnterType(EnterType::Enter),
-      mCallback(callback),
-      mPage(nullptr),
-      mOptionValue(0)
+      mCallback(callback)
 {
     checkDependencies();
 }
 
 void MenuOption::onEnter()
 {
-
+    mEnterType = (mEnterType == EnterType::Changing) ? EnterType::Saved : EnterType::Changing;
 }
 
 void MenuOption::onButtonUp()
 {
-
+    if (mEnterType == EnterType::Changing)
+    {
+        if (mType == OptionType::ConfigInline)
+        {
+            mConfigObj->handleButtonUp();
+        }
+    }
 }
 
 void MenuOption::onButtonDown()
 {
-
+    if (mEnterType == EnterType::Changing)
+    {
+        if (mType == OptionType::ConfigInline)
+        {
+            mConfigObj->handleButtonDown();
+        }
+    }
 }
 
-const char* MenuOption::getTextToDisplay() const
+void MenuOption::getTextToDisplay(char* text) const
 {
     if (mType == OptionType::Page)
     {
-        return mName;
+        sprintf(text, "%s", mName);
     }
     else if (mType == OptionType::ConfigInline)
     {
-        return mName;
+        bool prompt = mEnterType == EnterType::Changing;
+        mConfigObj->fillLabel(text, 20, prompt);
     }
-    return mName;
+    else if (mType == OptionType::ConfigCallback)
+    {
+        sprintf(text, "%s-callback", mName);
+    }
 }
 
 OptionType MenuOption::getType() const
@@ -89,6 +97,13 @@ void MenuOption::checkDependencies()
         if (mPage == nullptr)
         {
             FatalError("MenuOption with Page type requires valid mPage pointer!");
+        }
+    }
+    else if (mType == OptionType::ConfigInline)
+    {
+        if (mConfigObj == nullptr)
+        {
+            FatalError("MenuOption with ConfigInline type requires valid mConfigObj pointer!");
         }
     }
     else if (mType == OptionType::ConfigCallback)

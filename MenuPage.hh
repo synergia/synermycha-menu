@@ -22,9 +22,12 @@ public:
     MenuPage* getPageOfChoosenOption();
     OptionCallbackType getCallbackOfChoosenOption();
 
+    void setDisplayPromt(bool promt);
+
 private:
 
     std::array<MenuOption, maxNrOfOptions> mOptions;
     int mNumberOfOptions = 0;
     int mChoosenOption = 0;
+    bool mDisplayPromt = true;
 };

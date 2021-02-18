@@ -67,13 +67,14 @@ void Menu::onEnterPressed()
             if (page != nullptr)
             {
                 setDefaultMenuPage(page);
-                mActualPage->prepareMenuPageForDisplay();
-                mSignals.displayBuffor();
+               // mActualPage->prepareMenuPageForDisplay();
+               // mSignals.displayBuffor();
             }
         }
         else if (optionType == OptionType::ConfigInline)
         {
             mActualPage->passEnterToChoosenOption();
+            mActualPage->setDisplayPromt(false);
             mState = MenuState::Changing;
         }
     }
@@ -82,7 +83,10 @@ void Menu::onEnterPressed()
         if (optionType == OptionType::ConfigInline)
         {
             mActualPage->passEnterToChoosenOption();
+            mActualPage->setDisplayPromt(true);
             mState = MenuState::Normal;
         }
     }
+    mActualPage->prepareMenuPageForDisplay();
+    mSignals.displayBuffor();
 }

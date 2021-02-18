@@ -1,5 +1,6 @@
 #pragma once
 #include "AllSignals.hh"
+#include "IConfigInline.hh"
 
 class MenuPage;
 
@@ -14,8 +15,8 @@ enum class OptionType
 
 enum class EnterType
 {
-    Enter, // we start configuring this option
-    Exit // we exit from this option
+    Changing, // we start configuring this option
+    Saved // saving changes
 };
 
 class MenuOption
@@ -25,7 +26,7 @@ public:
     // for Page
     MenuOption(const char* name, OptionType type, MenuPage* page);
     // for ConfigInline
-    MenuOption(const char* name, OptionType type);
+    MenuOption(const char* name, OptionType type, IConfigInline* configObj);
     // for ConfigCallback
     MenuOption(const char* name, OptionType type, OptionCallbackType callback);
     
@@ -33,7 +34,7 @@ public:
     void onButtonUp();
     void onButtonDown();
 
-    const char* getTextToDisplay() const;
+    void getTextToDisplay(char* text) const;
     OptionType getType() const;
     MenuPage* getPage();
     OptionCallbackType getCallback();
@@ -43,11 +44,9 @@ private:
 
     const char* mName;
     OptionType mType;
-    EnterType mEnterType;
+    EnterType mEnterType = EnterType::Saved;
 
     MenuPage* mPage = nullptr;
     OptionCallbackType mCallback = nullptr;
-
-    // used only in ConfigInline type
-    int mOptionValue;
+    IConfigInline* mConfigObj = nullptr;
 };

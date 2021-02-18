@@ -3,6 +3,7 @@
 #include "Signal.hh"
 #include "AllSignals.hh"
 #include "DisplayBuffor.hh"
+#include "ConfigInlineP.hh"
 #include <ncurses.h>
 #include <thread>
 #include <cstring>
@@ -39,50 +40,6 @@ void ShowDisplayBuffor()
     }
 }
 
-void setPCallback(AllSignals& signals)
-{
-    printw("jestem pierwszy\n");
-    for (int i = 0; i < maxRows; i++)
-        for (int j = 0; j < maxColumns; j++)
-            displayBuff[i][j] = ' ';
-
-    bool finish = false;
-    int P = 10;
-    bool changed = true;
-    auto funFinish = [&](){ finish = true; changed = true; };
-    auto funPUp = [&](){ ++P; changed = true; };
-    auto funDown = [&](){ --P; changed = true; };
-
-    signals.buttonEnter.connect(funFinish);
-    signals.buttonUp.connect(funPUp);
-    signals.buttonDown.connect(funDown);
-
-    //while(!finish)
-    //{
-        int ch = 0;
-        do {
-            switch(ch) 
-            {
-                case KEY_UP: ++P; changed = true;
-                break;
-
-                case KEY_DOWN: --P; changed = true;
-                break;
-            }
-            if (changed)
-            {
-                sprintf(displayBuff[0], "P = %d", P);
-                signals.displayBuffor();
-                changed = false;
-            }
-        } while ((ch = getch()) != ' ');
-
-    //}
-    signals.buttonEnter.disconnect(funFinish);
-    signals.buttonUp.disconnect(funPUp);
-    signals.buttonDown.disconnect(funDown);
-}
-
 int main()
 {
     AllSignals allSignals;
@@ -97,16 +54,12 @@ int main()
     MenuPage pageFirst;
     MenuPage pagePid;
 
+    ConfigInlineP configP{5};
     auto dummy = [](AllSignals&){};
     pageFirst.AddOption(MenuOption("PID", OptionType::Page, &pagePid));
-    pageFirst.AddOption(MenuOption("Opcja 2", OptionType::ConfigInline));
-    pageFirst.AddOption(MenuOption("Opcja 3", OptionType::ConfigInline));
-    pageFirst.AddOption(MenuOption("Opcja 4", OptionType::ConfigInline));
-    pageFirst.AddOption(MenuOption("Opcja 5", OptionType::ConfigInline));
-    pageFirst.AddOption(MenuOption("Opcja 6", OptionType::ConfigInline));
-    pageFirst.AddOption(MenuOption("Info", OptionType::ConfigInline));
+    pageFirst.AddOption(MenuOption("Opcja 2", OptionType::ConfigCallback, dummy));
 
-    pagePid.AddOption(MenuOption("Set P", OptionType::ConfigInline, setPCallback));
+    pagePid.AddOption(MenuOption("Set P", OptionType::ConfigInline, &configP));
     pagePid.AddOption(MenuOption("Return", OptionType::Page, &pageFirst));
 
     menu.setDefaultMenuPage(&pageFirst);
