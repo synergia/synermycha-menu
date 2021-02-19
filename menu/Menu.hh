@@ -2,8 +2,11 @@
 
 #include <array>
 #include "MenuPage.hh"
-#include "AllSignals.hh"
-#include "Observer.hh"
+#include "utils/AllSignals.hh"
+#include "utils/Observer.hh"
+
+namespace menu
+{
 
 constexpr int maxNrOfItemMenus{10};
 
@@ -14,10 +17,10 @@ enum class MenuState
 };
 
 
-class Menu : public Observer
+class Menu : public utils::Observer
 {
 public:
-    Menu(AllSignals& sig);
+    Menu(utils::AllSignals& sig);
 
     void setDefaultMenuPage(MenuPage* page);
     void onButtonDownPressed();
@@ -25,7 +28,9 @@ public:
     void onEnterPressed();
 
 private:
-    AllSignals& mSignals;
+    utils::AllSignals& mSignals;
     MenuPage* mActualPage;
     MenuState mState;
 };
+
+}

@@ -1,14 +1,14 @@
 #include <iostream>
-#include "Menu.hh"
-#include "AllSignals.hh"
-#include "DisplayBuffor.hh"
-#include "ConfigInlineP.hh"
+#include "menu/Menu.hh"
+#include "utils/AllSignals.hh"
+#include "utils/DisplayBuffor.hh"
+#include "menu/config_inline/ConfigInlineP.hh"
 #include <ncurses.h>
 #include <thread>
 #include <cstring>
-#include "Signal.hh"
+#include "utils/Signal.hh"
 
-void handleButtons(AllSignals& sig)
+void handleButtons(utils::AllSignals& sig)
 {
     int ch;
     while ((ch = getch()) != 'q') {
@@ -28,10 +28,10 @@ void handleButtons(AllSignals& sig)
     }
 }
 
-class Display : public Observer
+class Display : public utils::Observer
 {
 public:
-    Display(AllSignals& sigs) : mAllSignals(sigs)
+    Display(utils::AllSignals& sigs) : mAllSignals(sigs)
     {
         mAllSignals.displayBuffor.connect<Display, &Display::ShowDisplayBuffor>(*this);
     }
@@ -39,18 +39,20 @@ public:
     {
         clear();
         refresh();
-        for (int i = 0; i < maxRows; i++)
+        for (int i = 0; i < utils::maxRows; i++)
         {
-            printw(displayBuff[i]);
+            printw(utils::displayBuff[i]);
             printw("\n");
         }
     }
-    AllSignals& mAllSignals;
+    utils::AllSignals& mAllSignals;
 };
 
 int main()
 {
-    AllSignals allSignals;
+    using namespace menu;
+
+    utils::AllSignals allSignals;
     Display display(allSignals);
 
     initscr();
@@ -62,8 +64,8 @@ int main()
     MenuPage pageFirst;
     MenuPage pagePid;
 
-    ConfigInlineP configP{5};
-    auto dummy = [](AllSignals&){};
+    config_inline::ConfigInlineP configP{5};
+    auto dummy = [](utils::AllSignals&){};
     pageFirst.AddOption(MenuOption("PID", OptionType::Page, &pagePid));
     pageFirst.AddOption(MenuOption("Opcja 2", OptionType::ConfigCallback, dummy));
 

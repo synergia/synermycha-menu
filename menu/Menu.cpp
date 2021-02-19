@@ -1,8 +1,10 @@
 #include "Menu.hh"
 #include <iostream>
 
+namespace menu
+{
 
-Menu::Menu(AllSignals& sig)
+Menu::Menu(utils::AllSignals& sig)
     : mSignals{sig},
       mState(MenuState::Normal)
 {
@@ -87,4 +89,6 @@ void Menu::onEnterPressed()
     }
     mActualPage->prepareMenuPageForDisplay();
     mSignals.displayBuffor.emit();
+}
+
 }

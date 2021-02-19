@@ -1,6 +1,9 @@
 #include "MenuOption.hh"
-#include "FatalError.hh"
+#include "utils/FatalError.hh"
 #include <cstdio>
+
+namespace menu
+{
 
 MenuOption::MenuOption()
 {
@@ -15,7 +18,7 @@ MenuOption::MenuOption(const char* name, OptionType type, MenuPage* page)
     checkDependencies();
 }
 
-MenuOption::MenuOption(const char* name, OptionType type, IConfigInline* configObj)
+MenuOption::MenuOption(const char* name, OptionType type, config_inline::IConfigInline* configObj)
     : mName(name),
       mType(type),
       mConfigObj(configObj)
@@ -96,21 +99,23 @@ void MenuOption::checkDependencies()
     {
         if (mPage == nullptr)
         {
-            FatalError("MenuOption with Page type requires valid mPage pointer!");
+            utils::FatalError("MenuOption with Page type requires valid mPage pointer!");
         }
     }
     else if (mType == OptionType::ConfigInline)
     {
         if (mConfigObj == nullptr)
         {
-            FatalError("MenuOption with ConfigInline type requires valid mConfigObj pointer!");
+            utils::FatalError("MenuOption with ConfigInline type requires valid mConfigObj pointer!");
         }
     }
     else if (mType == OptionType::ConfigCallback)
     {
         if (mCallback == nullptr)
         {
-            FatalError("MenuOption with ConfigCallback type requires valid mCallback pointer!");
+            utils::FatalError("MenuOption with ConfigCallback type requires valid mCallback pointer!");
         }
     }
+}
+
 }

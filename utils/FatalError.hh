@@ -3,6 +3,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+namespace utils
+{
+
 static void FatalError(const char* message)
 {
     clear();
@@ -10,4 +13,6 @@ static void FatalError(const char* message)
     refresh();
     sleep(5);
     abort();
+}
+
 }

@@ -3,6 +3,9 @@
 #include <array>
 #include "MenuOption.hh"
 
+namespace menu
+{
+
 constexpr int maxNrOfOptions = 10;
 
 class MenuPage
@@ -31,3 +34,5 @@ private:
     int mChoosenOption = 0;
     bool mDisplayPromt = true;
 };
+
+}

@@ -1,6 +1,8 @@
 #include "ConfigInlineP.hh"
 #include <cstdio>
 
+namespace menu {
+namespace config_inline {
 
 ConfigInlineP::ConfigInlineP(int P) : mP(P)
 {
@@ -26,4 +28,7 @@ void ConfigInlineP::fillLabel(char* text, int maxLen, bool prompt)
     {
         sprintf(text, "P     %d", mP);
     }
+}
+
+}
 }

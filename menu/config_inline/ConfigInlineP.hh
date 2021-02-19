@@ -2,6 +2,9 @@
 
 #include "IConfigInline.hh"
 
+namespace menu {
+namespace config_inline {
+
 class ConfigInlineP : public IConfigInline
 {
 public:
@@ -15,3 +18,6 @@ public:
 private:
     int mP;
 };
+
+}
+}

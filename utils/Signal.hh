@@ -3,6 +3,9 @@
 #include <array>
 #include "Observer.hh"
 
+namespace utils
+{
+
 constexpr int maxNrOfSignals = 10;
 
 template<typename R, typename ...Args>
@@ -37,10 +40,6 @@ private:
     R(*mPtr)(Observer*, Args...);
     Observer* mObj;
 };
-
-
-namespace Mysigslot
-{
 
 template<typename T>
 class signal {};

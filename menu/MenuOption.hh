@@ -1,10 +1,13 @@
 #pragma once
-#include "AllSignals.hh"
-#include "IConfigInline.hh"
+#include "utils/AllSignals.hh"
+#include "menu/config_inline/IConfigInline.hh"
+
+namespace menu
+{
 
 class MenuPage;
 
-using OptionCallbackType = void(*)(AllSignals&);
+using OptionCallbackType = void(*)(utils::AllSignals&);
 
 enum class OptionType
 {
@@ -26,7 +29,7 @@ public:
     // for Page
     MenuOption(const char* name, OptionType type, MenuPage* page);
     // for ConfigInline
-    MenuOption(const char* name, OptionType type, IConfigInline* configObj);
+    MenuOption(const char* name, OptionType type, config_inline::IConfigInline* configObj);
     // for ConfigCallback
     MenuOption(const char* name, OptionType type, OptionCallbackType callback);
     
@@ -48,5 +51,7 @@ private:
 
     MenuPage* mPage = nullptr;
     OptionCallbackType mCallback = nullptr;
-    IConfigInline* mConfigObj = nullptr;
+    config_inline::IConfigInline* mConfigObj = nullptr;
 };
+
+}
