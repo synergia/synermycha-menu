@@ -28,7 +28,6 @@ public:
     void setDisplayPromt(bool promt);
 
 private:
-
     std::array<MenuOption, maxNrOfOptions> mOptions;
     int mNumberOfOptions = 0;
     int mChoosenOption = 0;

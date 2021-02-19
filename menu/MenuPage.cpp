@@ -1,6 +1,6 @@
 #include "MenuPage.hh"
 #include <iostream>
-#include "utils/DisplayBuffor.hh"
+#include "utils/Display.hh"
 #include <cstring>
 #include <algorithm>
 

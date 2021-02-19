@@ -1,12 +1,11 @@
 #include <iostream>
 #include "menu/Menu.hh"
 #include "utils/AllSignals.hh"
-#include "utils/DisplayBuffor.hh"
-#include "menu/config_inline/ConfigInlineP.hh"
+#include "utils/Display.hh"
+#include "menu/config_inline/ConfigInlineSingleValue.hh"
 #include <ncurses.h>
 #include <thread>
 #include <cstring>
-#include "utils/Signal.hh"
 
 void handleButtons(utils::AllSignals& sig)
 {
@@ -28,32 +27,13 @@ void handleButtons(utils::AllSignals& sig)
     }
 }
 
-class Display : public utils::Observer
-{
-public:
-    Display(utils::AllSignals& sigs) : mAllSignals(sigs)
-    {
-        mAllSignals.displayBuffor.connect<Display, &Display::ShowDisplayBuffor>(*this);
-    }
-    void ShowDisplayBuffor()
-    {
-        clear();
-        refresh();
-        for (int i = 0; i < utils::maxRows; i++)
-        {
-            printw(utils::displayBuff[i]);
-            printw("\n");
-        }
-    }
-    utils::AllSignals& mAllSignals;
-};
 
 int main()
 {
     using namespace menu;
 
     utils::AllSignals allSignals;
-    Display display(allSignals);
+    utils::Display display(allSignals);
 
     initscr();
     raw();
@@ -63,14 +43,28 @@ int main()
     Menu menu(allSignals);
     MenuPage pageFirst;
     MenuPage pagePid;
+    MenuPage pageCos;
 
-    config_inline::ConfigInlineP configP{5};
+    config_inline::ConfigInlineSingleValue<int> configP("P", 5, 2);
+    config_inline::ConfigInlineSingleValue<int> configI("I", -2, 1);
+    config_inline::ConfigInlineSingleValue<double> configD("D", 8.5, 0.1);
+
+    config_inline::ConfigInlineSingleValue<int> configCos("cos", -55, 5);
+    config_inline::ConfigInlineSingleValue<bool> configBool("win?", true);
+
     auto dummy = [](utils::AllSignals&){};
     pageFirst.AddOption(MenuOption("PID", OptionType::Page, &pagePid));
+    pageFirst.AddOption(MenuOption("cos", OptionType::Page, &pageCos));
     pageFirst.AddOption(MenuOption("Opcja 2", OptionType::ConfigCallback, dummy));
 
     pagePid.AddOption(MenuOption("Set P", OptionType::ConfigInline, &configP));
+    pagePid.AddOption(MenuOption("Set I", OptionType::ConfigInline, &configI));
+    pagePid.AddOption(MenuOption("Set D", OptionType::ConfigInline, &configD));
     pagePid.AddOption(MenuOption("Return", OptionType::Page, &pageFirst));
+
+    pageCos.AddOption(MenuOption("ustaw cos", OptionType::ConfigInline, &configCos));
+    pageCos.AddOption(MenuOption("ustaw boola", OptionType::ConfigInline, &configBool));
+    pageCos.AddOption(MenuOption("Return", OptionType::Page, &pageFirst));
 
     menu.setDefaultMenuPage(&pageFirst);
 
