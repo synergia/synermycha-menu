@@ -4,17 +4,9 @@
 
 struct AllSignals
 {
-    sigslot::signal<> buttonUp;
-    sigslot::signal<> buttonDown;
-    sigslot::signal<> buttonEnter;
+    Mysigslot::signal<void(void)> buttonUp;
+    Mysigslot::signal<void(void)> buttonDown;
+    Mysigslot::signal<void(void)> buttonEnter;
 
-    sigslot::signal<> displayBuffor;
-
-    sigslot::signal<int&> getP;
-    sigslot::signal<int&> getI;
-    sigslot::signal<int&> getD;
-
-    sigslot::signal<int> setP;
-    sigslot::signal<int> setI;
-    sigslot::signal<int> setD;
+    Mysigslot::signal<void(void)> displayBuffor;
 };

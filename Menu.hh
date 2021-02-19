@@ -3,6 +3,7 @@
 #include <array>
 #include "MenuPage.hh"
 #include "AllSignals.hh"
+#include "Observer.hh"
 
 constexpr int maxNrOfItemMenus{10};
 
@@ -13,7 +14,7 @@ enum class MenuState
 };
 
 
-class Menu
+class Menu : public Observer
 {
 public:
     Menu(AllSignals& sig);

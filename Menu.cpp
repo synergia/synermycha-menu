@@ -6,9 +6,9 @@ Menu::Menu(AllSignals& sig)
     : mSignals{sig},
       mState(MenuState::Normal)
 {
-    sig.buttonUp.connect(&Menu::onButtonUpPressed, this);
-    sig.buttonDown.connect(&Menu::onButtonDownPressed, this);
-    sig.buttonEnter.connect(&Menu::onEnterPressed, this);
+    sig.buttonUp.connect<Menu, &Menu::onButtonUpPressed>(*this);
+    sig.buttonDown.connect<Menu, &Menu::onButtonDownPressed>(*this);
+    sig.buttonEnter.connect<Menu, &Menu::onEnterPressed>(*this);
 }
 
 void Menu::setDefaultMenuPage(MenuPage* page)
@@ -22,7 +22,7 @@ void Menu::onButtonDownPressed()
     {
         mActualPage->shiftToNextOption();
         mActualPage->prepareMenuPageForDisplay();
-        mSignals.displayBuffor();
+        mSignals.displayBuffor.emit();
     }
     else // MenuState::Changing
     {
@@ -31,7 +31,7 @@ void Menu::onButtonDownPressed()
         if (mActualPage->getTypeOfChoosenOption() not_eq OptionType::ConfigCallback)
         {
             mActualPage->prepareMenuPageForDisplay();
-            mSignals.displayBuffor();
+            mSignals.displayBuffor.emit();
         }
     }
 }
@@ -42,7 +42,7 @@ void Menu::onButtonUpPressed()
     {
         mActualPage->shiftToPreviousOption();
         mActualPage->prepareMenuPageForDisplay();
-        mSignals.displayBuffor();
+        mSignals.displayBuffor.emit();
     }
     else // MenuState::Changing
     {
@@ -51,7 +51,7 @@ void Menu::onButtonUpPressed()
         if (mActualPage->getTypeOfChoosenOption() not_eq OptionType::ConfigCallback)
         {
             mActualPage->prepareMenuPageForDisplay();
-            mSignals.displayBuffor();
+            mSignals.displayBuffor.emit();
         }
     }
 }
@@ -67,8 +67,6 @@ void Menu::onEnterPressed()
             if (page != nullptr)
             {
                 setDefaultMenuPage(page);
-               // mActualPage->prepareMenuPageForDisplay();
-               // mSignals.displayBuffor();
             }
         }
         else if (optionType == OptionType::ConfigInline)
@@ -88,5 +86,5 @@ void Menu::onEnterPressed()
         }
     }
     mActualPage->prepareMenuPageForDisplay();
-    mSignals.displayBuffor();
+    mSignals.displayBuffor.emit();
 }

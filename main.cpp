@@ -1,13 +1,12 @@
 #include <iostream>
 #include "Menu.hh"
-#include "Signal.hh"
 #include "AllSignals.hh"
 #include "DisplayBuffor.hh"
 #include "ConfigInlineP.hh"
 #include <ncurses.h>
 #include <thread>
 #include <cstring>
-
+#include "Signal.hh"
 
 void handleButtons(AllSignals& sig)
 {
@@ -15,35 +14,44 @@ void handleButtons(AllSignals& sig)
     while ((ch = getch()) != 'q') {
         switch(ch) {
             case KEY_UP: 
-                sig.buttonUp();
+                sig.buttonUp.emit();
             break;
 
             case KEY_DOWN:
-                sig.buttonDown();
+                sig.buttonDown.emit();
             break;
 
             case ' ':
-                sig.buttonEnter();
+                sig.buttonEnter.emit();
             break;
         }
     }
 }
 
-void ShowDisplayBuffor()
+class Display : public Observer
 {
-    clear();
-    refresh();
-    for (int i = 0; i < maxRows; i++)
+public:
+    Display(AllSignals& sigs) : mAllSignals(sigs)
     {
-        printw(displayBuff[i]);
-        printw("\n");
+        mAllSignals.displayBuffor.connect<Display, &Display::ShowDisplayBuffor>(*this);
     }
-}
+    void ShowDisplayBuffor()
+    {
+        clear();
+        refresh();
+        for (int i = 0; i < maxRows; i++)
+        {
+            printw(displayBuff[i]);
+            printw("\n");
+        }
+    }
+    AllSignals& mAllSignals;
+};
 
 int main()
 {
     AllSignals allSignals;
-    allSignals.displayBuffor.connect(ShowDisplayBuffor);
+    Display display(allSignals);
 
     initscr();
     raw();
