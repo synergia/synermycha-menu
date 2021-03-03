@@ -49,17 +49,17 @@ void MenuPage::passButtonDownToChoosenOption()
 
 OptionType MenuPage::getTypeOfChoosenOption() const
 {
-    mOptions[mChoosenOption].getType();
+    return mOptions[mChoosenOption].getType();
 }
 
 MenuPage* MenuPage::getPageOfChoosenOption()
 {
-    mOptions[mChoosenOption].getPage();
+    return mOptions[mChoosenOption].getPage();
 }
 
 OptionCallbackType MenuPage::getCallbackOfChoosenOption()
 {
-    mOptions[mChoosenOption].getCallback();
+    return mOptions[mChoosenOption].getCallback();
 }
 
 void MenuPage::setDisplayPromt(bool promt)

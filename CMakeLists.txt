@@ -23,7 +23,7 @@ foreach(SOURCE ${SOURCE_PATHS})
     aux_source_directory(${SOURCE} SOURCES)
 endforeach()
     
-SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -g")
+SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -g -Wall")
 add_executable(menu ${SOURCES})
 
 target_link_libraries(menu ${CURSES_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
